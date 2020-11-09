@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 namespace FileObserver
 {
     class Program
-    {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
-
+    {       
         private const string Path = @"d:\StudyingProgects\FileObserver\Data\";        
 
         static void Main(string[] args)

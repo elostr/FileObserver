@@ -1,5 +1,4 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,8 +7,6 @@ namespace FileObserver
 {
     public class DirectoryWatcher
     {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
-
         private FileSystemWatcher _watcher;
 
         private object _locker = new Object();
@@ -94,7 +91,7 @@ namespace FileObserver
                     try
                     {
                         int charCount = CharacterCounter.Count(path);
-                        _logger.Info("Файл: {0}, количество символов {1}", fileName, charCount);
+                        Logger.WriteCountOfCharacters(fileName, charCount);
                     }
                     finally { _semaphoreSlim.Release(); }
                 });

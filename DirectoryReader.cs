@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 namespace FileObserver
 {
     public class DirectoryReader
-    {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
-        
+    {        
         private string _path;
 
         private SemaphoreSlim _semaphoreSlim;
@@ -45,7 +43,7 @@ namespace FileObserver
                         try
                         {
                             int charCount = CharacterCounter.Count(fileInfo.FullName);
-                            _logger.Info("Файл: {0}, количество символов {1}", fileInfo.Name, charCount);
+                           Logger.WriteCountOfCharacters(fileInfo.Name, charCount);
                         }
                         finally
                         {

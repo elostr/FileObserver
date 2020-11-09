@@ -16,7 +16,9 @@ namespace FileObserver
 
         private string _path;
 
-        public DirectoryWatcher(string path)
+        private SemaphoreSlim _semaphoreSlim;
+
+        public DirectoryWatcher(string path, SemaphoreSlim semaphoreSlim)
         {
             PathVerifier.Verify(path);
             if (Directory.Exists(path))
@@ -27,6 +29,7 @@ namespace FileObserver
             {
                 throw new ArgumentException("Папки с таким именем не существует.");
             }
+            _semaphoreSlim = semaphoreSlim;
         }
 
         public void Start()
@@ -40,9 +43,8 @@ namespace FileObserver
 
                 _watcher = new FileSystemWatcher(_path);
                 _watcher.NotifyFilter = NotifyFilters.LastWrite
-                                     | NotifyFilters.FileName
-                                     | NotifyFilters.Size;
-
+                                     | NotifyFilters.FileName;
+                
                 _watcher.Changed += watcher_Changed;
                 _watcher.Created += watcher_Changed;
                 _watcher.Deleted += watcher_Changed;
@@ -72,34 +74,35 @@ namespace FileObserver
             }
         }
 
-        private async void watcher_Renamed(object sender, RenamedEventArgs e)
+        private void watcher_Renamed(object sender, RenamedEventArgs e)
+        {
+            watchChanges(e.FullPath, e.Name);
+        }
+
+        private void watcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            watchChanges(e.FullPath, e.Name);
+        }
+
+        private async void watchChanges(string path, string fileName)
         {
             try
             {
-                await Task.Run(() => watchChanges(e.FullPath, e.Name));
+                await _semaphoreSlim.WaitAsync();
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        int charCount = CharacterCounter.Count(path);
+                        _logger.Info("Файл: {0}, количество символов {1}", fileName, charCount);
+                    }
+                    finally { _semaphoreSlim.Release(); }
+                });
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-        }
-
-        private async void watcher_Changed(object sender, FileSystemEventArgs e)
-        {
-            try
-            {
-                await Task.Run(() => watchChanges(e.FullPath, e.Name));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        private void watchChanges(string path, string fileName)
-        {
-            int charCount = CharacterCounter.Count(path);
-            _logger.Info("Файл: {0}, количество символов {1}", fileName, charCount);
         }
     }
 }

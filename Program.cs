@@ -10,18 +10,20 @@ namespace FileObserver
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        private const string Path = @"d:\StudyingProgects\FileObserver\Data\";
+        private const string Path = @"d:\StudyingProgects\FileObserver\Data\";        
 
         static void Main(string[] args)
         {
+            SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(4);
+
             DirectoryWatcher watcher = null;
             DirectoryReader reader = null;
             try
             {
-                reader = new DirectoryReader(Path);
+                reader = new DirectoryReader(Path, _semaphoreSlim);
                 reader.Read();
 
-                watcher = new DirectoryWatcher(Path);
+                watcher = new DirectoryWatcher(Path, _semaphoreSlim);
                 watcher.Start();
                 Console.Read();
             }

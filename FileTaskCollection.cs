@@ -7,31 +7,21 @@ namespace FileObserver
 {
     public class FileTaskCollection : IProducerCollection, IConsumerCollection
     {
-        private readonly IProducerConsumerCollection<FileTask> _collection = new ConcurrentQueue<FileTask>();
+        private readonly ConcurrentQueue<FileTask> _collection = new ConcurrentQueue<FileTask>();
 
         private readonly object _object = new object();
 
-        private readonly AutoResetEvent _taskAdded = new AutoResetEvent(initialState: false);
-
-        public bool TryAdd(FileTask fileTask)
+        public void Add(FileTask fileTask)
         {
-            lock (_object)
-            {
-                var rval = _collection.TryAdd(fileTask);
-                if (rval)
-                {
-                    _taskAdded.Set();
-                }
-
-                return rval;
-            }
+            _collection.Enqueue(fileTask);
+            TaskAdded.Set();
         }
 
-        public AutoResetEvent TaskAdded => _taskAdded;
+        public AutoResetEvent TaskAdded { get; } = new AutoResetEvent(initialState: false);
 
         public bool TryTake(out FileTask fileTask)
         {
-            return _collection.TryTake(out fileTask);
+            return _collection.TryDequeue(out fileTask);
         }        
     }
 }

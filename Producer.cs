@@ -59,18 +59,18 @@ namespace FileObserver
             FileInfo[] files = directoryInfo.GetFiles();
             foreach (FileInfo fileInfo in files)
             {
-                _collection.TryAdd(new FileTask(fileInfo.FullName));
+                _collection.Add(new FileTask(fileInfo.FullName));
             }
         }
 
         private void watcher_Renamed(object sender, RenamedEventArgs e)
         {
-            _collection.TryAdd(new FileTask(e.FullPath));
+            _collection.Add(new FileTask(e.FullPath));
         }
 
         private void watcher_Changed(object sender, FileSystemEventArgs e)
         {
-            _collection.TryAdd(new FileTask(e.FullPath));
+            _collection.Add(new FileTask(e.FullPath));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace FileObserver
         public void Work(FileTask fileTask)
         {
             int charCount = File.ReadAllText(fileTask.Path).Count(c => !Char.IsControl(c) && !Char.IsWhiteSpace(c));
-            _writer.Write(fileTask.Path, charCount);
+            _writer.Write(fileTask.Name, charCount);
         }
     }
 }

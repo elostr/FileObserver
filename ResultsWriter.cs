@@ -9,7 +9,7 @@ namespace FileObserver
 
         public void Write(string fileName, long count)
         {
-            _logger.Info($"Файл: {fileName}, количество символов {count}");
+            _logger.Info($"{fileName}: {count}");
         }
     }
 }

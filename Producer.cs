@@ -18,15 +18,17 @@ namespace FileObserver
 
         public void Start()
         {
-            init();
+            Init();
             if (_watcher != null)
             {
                 return;
             }
 
-            _watcher = new FileSystemWatcher(_path);
-            _watcher.NotifyFilter = NotifyFilters.LastWrite
-                                 | NotifyFilters.FileName;
+            _watcher = new FileSystemWatcher(_path)
+            {
+                NotifyFilter = NotifyFilters.LastWrite
+                               | NotifyFilters.FileName
+            };
 
             _watcher.Changed += watcher_Changed;
             _watcher.Created += watcher_Changed;
@@ -53,24 +55,24 @@ namespace FileObserver
             _watcher.Dispose();
         }
 
-        private void init()
+        private void Init()
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(_path);
             FileInfo[] files = directoryInfo.GetFiles();
             foreach (FileInfo fileInfo in files)
             {
-                _collection.Add(new FileTask(fileInfo.FullName));
+                _collection.Add(new FileTask(fileInfo.FullName, fileInfo.Name));
             }
         }
 
         private void watcher_Renamed(object sender, RenamedEventArgs e)
         {
-            _collection.Add(new FileTask(e.FullPath));
+            _collection.Add(new FileTask(e.FullPath, e.Name));
         }
 
         private void watcher_Changed(object sender, FileSystemEventArgs e)
         {
-            _collection.Add(new FileTask(e.FullPath));
+            _collection.Add(new FileTask(e.FullPath, e.Name));
         }
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\StudyingProgects\\FileObserver\\FileObserver\\FileObserver.csproj": {}
+    "d:\\StudyingProgects\\FileObserver\\FileObserver\\FileObserver.csproj": {}
   },
   "projects": {
-    "D:\\StudyingProgects\\FileObserver\\FileObserver\\FileObserver.csproj": {
+    "d:\\StudyingProgects\\FileObserver\\FileObserver\\FileObserver.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\StudyingProgects\\FileObserver\\FileObserver\\FileObserver.csproj",
+        "projectUniqueName": "d:\\StudyingProgects\\FileObserver\\FileObserver\\FileObserver.csproj",
         "projectName": "FileObserver",
-        "projectPath": "D:\\StudyingProgects\\FileObserver\\FileObserver\\FileObserver.csproj",
+        "projectPath": "d:\\StudyingProgects\\FileObserver\\FileObserver\\FileObserver.csproj",
         "packagesPath": "C:\\Users\\opto.opto-ПК\\.nuget\\packages\\",
-        "outputPath": "D:\\StudyingProgects\\FileObserver\\FileObserver\\obj\\",
+        "outputPath": "d:\\StudyingProgects\\FileObserver\\FileObserver\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\opto.opto-ПК\\AppData\\Roaming\\NuGet\\NuGet.Config",

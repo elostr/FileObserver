@@ -5,17 +5,14 @@ using FileObserver.Contracts;
 
 namespace FileObserver
 {
-    /// <summary>
-    /// Что-то делает с полученным файлом.
-    /// </summary>
     public class FileWorker : IFileWorker
     {
         /// <summary>
-        /// Считает количество символов в файле.
+        /// Для примера: просто считаем количество символов.
         /// </summary>
         public int Work(string path)
         {
-            return File.ReadAllText(path).Count(c => !Char.IsControl(c) && !Char.IsWhiteSpace(c));
+            return File.ReadAllText(path).Count(c => !char.IsControl(c) && !char.IsWhiteSpace(c));
         }
     }
 }

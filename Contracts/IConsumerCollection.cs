@@ -2,6 +2,9 @@
 
 namespace FileObserver.Contracts
 {
+    /// <summary>
+    /// интерфейс шины данных для consumer
+    /// </summary>
     public interface IConsumerCollection
     {
        AutoResetEvent TaskAdded { get; }

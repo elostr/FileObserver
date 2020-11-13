@@ -12,17 +12,40 @@ namespace FileObserver
 
         private readonly IResultsWriter _writer;
 
+        private readonly CancellationTokenSource _ctSource;
+
+        private Task _task;
+
         public Consumer(IConsumerCollection collection, IFileWorker worker, IResultsWriter writer)
         {
             _collection = collection;
             _worker = worker;
             _writer = writer;
+
+            _ctSource = new CancellationTokenSource();
         }
 
-        public void Start(CancellationToken token)
+        public void Start()
         {
-            Task task = new Task(() => Execute(token));
-            task.Start();
+            if (_task != null)
+            {
+                return;
+            }
+
+            _task = Task.Run(() => Execute(_ctSource.Token));
+        }
+
+        public void Stop()
+        {
+            if (_task == null)
+            {
+                return;
+            }
+
+            _ctSource.Cancel();
+            _task.Wait();
+            _task.Dispose();
+            _task = null;
         }
 
         private void Execute(CancellationToken token)

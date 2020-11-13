@@ -30,10 +30,10 @@ namespace FileObserver
                                | NotifyFilters.FileName
             };
 
-            _watcher.Changed += watcher_Changed;
-            _watcher.Created += watcher_Changed;
-            _watcher.Deleted += watcher_Changed;
-            _watcher.Renamed += watcher_Renamed;
+            _watcher.Changed += Watcher_Changed;
+            _watcher.Created += Watcher_Changed;
+            _watcher.Deleted += Watcher_Changed;
+            _watcher.Renamed += Watcher_Renamed;
 
             _watcher.EnableRaisingEvents = true;
         }
@@ -47,30 +47,30 @@ namespace FileObserver
 
             _watcher.EnableRaisingEvents = false;
 
-            _watcher.Changed -= watcher_Changed;
-            _watcher.Created -= watcher_Changed;
-            _watcher.Deleted -= watcher_Changed;
-            _watcher.Renamed -= watcher_Renamed;
+            _watcher.Changed -= Watcher_Changed;
+            _watcher.Created -= Watcher_Changed;
+            _watcher.Deleted -= Watcher_Changed;
+            _watcher.Renamed -= Watcher_Renamed;
 
             _watcher.Dispose();
         }
 
         private void Init()
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(_path);
-            FileInfo[] files = directoryInfo.GetFiles();
-            foreach (FileInfo fileInfo in files)
+            var directoryInfo = new DirectoryInfo(_path);
+            var files = directoryInfo.GetFiles();
+            foreach (var fileInfo in files)
             {
                 _collection.Add(fileInfo.FullName);
             }
         }
 
-        private void watcher_Renamed(object sender, RenamedEventArgs e)
+        private void Watcher_Renamed(object sender, RenamedEventArgs e)
         {
             _collection.Add(e.FullPath);
         }
 
-        private void watcher_Changed(object sender, FileSystemEventArgs e)
+        private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
             _collection.Add(e.FullPath);
         }

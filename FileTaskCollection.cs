@@ -14,7 +14,7 @@ namespace FileObserver
             TaskAdded.Set();
         }
 
-        public AutoResetEvent TaskAdded { get; } = new AutoResetEvent(initialState: false);
+        public AutoResetEvent TaskAdded { get; } = new AutoResetEvent(false);
 
         public bool TryTake(out string filePath)
         {

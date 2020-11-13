@@ -1,38 +1,34 @@
 ﻿using System;
-using System.Threading;
-using FileObserver.Contracts;
+using System.IO;
 
 namespace FileObserver
 {
-    class Program
+    internal class Program
     {       
         private const string Path = @"d:\StudyingProgects\FileObserver\Data\";
 
-        static void Main()
+        private static void Main()
         {
-            Verify(Path);
+            VerifyPath(Path);
 
-            FileTaskCollection taskCollection = new FileTaskCollection();
-            IResultsWriter writer = new ResultsWriter();
-            IFileWorker worker = new FileWorker();
+            var taskCollection = new FileTaskCollection();
+            var writer = new ResultsWriter();
+            var worker = new FileWorker();
 
-            Producer watcher = null;
+            var consumers = new Consumer[4];
+            Producer producer = null;
             try
             {
-                CancellationTokenSource source = new CancellationTokenSource();
+                producer = new Producer(Path, taskCollection);
+                producer.Start();
 
-                watcher = new Producer(Path, taskCollection);
-                watcher.Start();
-
-                Consumer[] consumers = new Consumer[4];
-                for (int i = 0; i < consumers.Length; i++)
+                for (var i = 0; i < consumers.Length; i++)
                 {
                     consumers[i] = new Consumer(taskCollection, worker, writer);
-                    consumers[i].Start(source.Token);
+                    consumers[i].Start();
                 }
 
                 Console.Read();
-                source.Cancel();
             }
             catch (Exception ex)
             {
@@ -40,14 +36,15 @@ namespace FileObserver
             }
             finally
             {
-                if (watcher != null)
+                foreach (var t in consumers)
                 {
-                    watcher.Stop();
+                    t?.Stop();
                 }
+                producer?.Stop();
             }
         }
 
-        public static void Verify(string path)
+        public static void VerifyPath(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -57,6 +54,11 @@ namespace FileObserver
             if (path.IndexOfAny(System.IO.Path.GetInvalidPathChars()) != -1)
             {
                 throw new ArgumentException("Путь содержит недопустимые символы.");
+            }
+
+            if (!Directory.Exists(path))
+            {
+                throw  new ArgumentException("Заданный путь не существует.");
             }
         }
     }

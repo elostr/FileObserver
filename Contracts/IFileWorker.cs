@@ -3,6 +3,9 @@ namespace FileObserver.Contracts
 {
     public interface IFileWorker
     {
-        void Work(FileTask fileTask);
+        /// <summary>
+        /// Cчитает количество символов в фвйле.
+        /// </summary>
+        int Work(string path);
     }
 }

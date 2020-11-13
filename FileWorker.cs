@@ -5,19 +5,17 @@ using FileObserver.Contracts;
 
 namespace FileObserver
 {
+    /// <summary>
+    /// Что-то делает с полученным файлом.
+    /// </summary>
     public class FileWorker : IFileWorker
     {
-        private readonly IResultsWriter _writer;
-
-        public FileWorker(IResultsWriter writer)
+        /// <summary>
+        /// Считает количество символов в файле.
+        /// </summary>
+        public int Work(string path)
         {
-            _writer = writer;
-        }
-
-        public void Work(FileTask fileTask)
-        {
-            int charCount = File.ReadAllText(fileTask.Path).Count(c => !Char.IsControl(c) && !Char.IsWhiteSpace(c));
-            _writer.Write(fileTask.Name, charCount);
+            return File.ReadAllText(path).Count(c => !Char.IsControl(c) && !Char.IsWhiteSpace(c));
         }
     }
 }

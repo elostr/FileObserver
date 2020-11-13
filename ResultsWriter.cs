@@ -5,7 +5,7 @@ namespace FileObserver
 {
     public class ResultsWriter : IResultsWriter
     {
-        private readonly NLog.Logger _logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public void Write(string fileName, long count)
         {

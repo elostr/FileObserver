@@ -1,17 +1,15 @@
-﻿namespace FileObserver
+﻿namespace FileObserver.Contracts
 {
     public struct FileTask
     {
-        private readonly string _path;
-
-        private readonly string _fileName;
         public FileTask(string path, string fileName)
         {
-            _path = path;
-            _fileName = fileName;
+            Path = path;
+            Name = fileName;
         }
 
-        public string Path => _path;
-        public string Name => _fileName;
+        public string Path { get; }
+
+        public string Name { get; }
     }
 }

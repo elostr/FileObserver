@@ -10,10 +10,13 @@ namespace FileObserver
 
         private readonly IFileWorker _worker;
 
-        public Consumer(IConsumerCollection collection, IFileWorker worker)
+        private readonly IResultsWriter _writer;
+
+        public Consumer(IConsumerCollection collection, IFileWorker worker, IResultsWriter writer)
         {
             _collection = collection;
             _worker = worker;
+            _writer = writer;
         }
 
         public void Start(CancellationToken token)
@@ -28,7 +31,8 @@ namespace FileObserver
             {                
                 while (_collection.TryTake(out var task) && !token.IsCancellationRequested)
                 {
-                    _worker.Work(task);
+                    int charCount = _worker.Work(task.Path);
+                    _writer.Write(task.Name, charCount);
                 }
 
                 WaitHandle.WaitAny(waitHandles: new[] { token.WaitHandle, _collection.TaskAdded });              

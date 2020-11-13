@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
 
 namespace FileObserver
@@ -9,6 +10,17 @@ namespace FileObserver
 
         private static void Main()
         {
+
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureHostConfiguration(builder =>
+                {
+                  //  builder.
+                })
+                .ConfigureServices(builder =>
+                {
+
+                });
+
             VerifyPath(Path);
 
             var taskCollection = new FileTaskCollection();

@@ -7,9 +7,9 @@ namespace FileObserver
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public void Write(string fileName, long count)
+        public void Write(string filePath, long count)
         {
-            _logger.Info($"{fileName}: {count}");
+            _logger.Info($"{filePath}: {count}");
         }
     }
 }

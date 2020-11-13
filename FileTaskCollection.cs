@@ -6,19 +6,19 @@ namespace FileObserver
 {
     public class FileTaskCollection : IProducerCollection, IConsumerCollection
     {
-        private readonly ConcurrentQueue<FileTask> _collection = new ConcurrentQueue<FileTask>();
+        private readonly ConcurrentQueue<string> _collection = new ConcurrentQueue<string>();
 
-        public void Add(FileTask fileTask)
+        public void Add(string filePath)
         {
-            _collection.Enqueue(fileTask);
+            _collection.Enqueue(filePath);
             TaskAdded.Set();
         }
 
         public AutoResetEvent TaskAdded { get; } = new AutoResetEvent(initialState: false);
 
-        public bool TryTake(out FileTask fileTask)
+        public bool TryTake(out string filePath)
         {
-            return _collection.TryDequeue(out fileTask);
+            return _collection.TryDequeue(out filePath);
         }        
     }
 }

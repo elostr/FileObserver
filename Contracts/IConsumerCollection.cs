@@ -6,7 +6,7 @@ namespace FileObserver.Contracts
     {
        AutoResetEvent TaskAdded { get; }
 
-       bool TryTake(out FileTask fileTask);
+       bool TryTake(out string filePath);
 
     }
 }

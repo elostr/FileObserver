@@ -31,11 +31,11 @@ namespace FileObserver
             {                
                 while (_collection.TryTake(out var task) && !token.IsCancellationRequested)
                 {
-                    int charCount = _worker.Work(task.Path);
-                    _writer.Write(task.Name, charCount);
+                    int charCount = _worker.Work(task);
+                    _writer.Write(task, charCount);
                 }
 
-                WaitHandle.WaitAny(waitHandles: new[] { token.WaitHandle, _collection.TaskAdded });              
+                WaitHandle.WaitAny(new[] { token.WaitHandle, _collection.TaskAdded });              
             }
         }        
     }

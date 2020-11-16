@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FileObserver": {
+      "commandName": "Project",
+      "commandLineArgs": "\"d:\\StudyingProgects\\FileObserver\\Data\""
+    }
+  }
+}

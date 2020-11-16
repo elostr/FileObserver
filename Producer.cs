@@ -30,10 +30,8 @@ namespace FileObserver
                                | NotifyFilters.FileName
             };
 
-            _watcher.Changed += Watcher_Changed;
             _watcher.Created += Watcher_Changed;
-            _watcher.Deleted += Watcher_Changed;
-            _watcher.Renamed += Watcher_Renamed;
+            _watcher.Changed += Watcher_Changed;
 
             _watcher.EnableRaisingEvents = true;
         }
@@ -47,10 +45,8 @@ namespace FileObserver
 
             _watcher.EnableRaisingEvents = false;
 
-            _watcher.Changed -= Watcher_Changed;
             _watcher.Created -= Watcher_Changed;
-            _watcher.Deleted -= Watcher_Changed;
-            _watcher.Renamed -= Watcher_Renamed;
+            _watcher.Changed -= Watcher_Changed;
 
             _watcher.Dispose();
         }
@@ -63,11 +59,6 @@ namespace FileObserver
             {
                 _collection.Add(fileInfo.FullName);
             }
-        }
-
-        private void Watcher_Renamed(object sender, RenamedEventArgs e)
-        {
-            _collection.Add(e.FullPath);
         }
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)

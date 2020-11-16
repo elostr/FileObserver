@@ -1,64 +1,34 @@
 ﻿using System;
-using System.IO;
+using NLog;
 
 namespace FileObserver
 {
     internal class Program
     {       
-        private const string Path = @"d:\StudyingProgects\FileObserver\Data\";
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        private static void Main()
+        private static void Main(string[] args)
         {
-            VerifyPath(Path);
+            if (args.Length != 1)
+            {
+                _logger.Error("Способ запуска: FileObserver.exe <путь к папке с файлами>");
+                return;
+            }
 
-            var taskCollection = new FileTaskCollection();
-            var writer = new ResultsWriter();
-            var worker = new FileWorker();
+            var service = new FileWatcherService(args[0], 4);
 
-            var consumers = new Consumer[4];
-            Producer producer = null;
             try
             {
-                producer = new Producer(Path, taskCollection);
-                producer.Start();
+                _logger.Info("Нажмите любую клавишу для остановки работы");
+                service.Start();
 
-                for (var i = 0; i < consumers.Length; i++)
-                {
-                    consumers[i] = new Consumer(taskCollection, worker, writer);
-                    consumers[i].Start();
-                }
+                Console.ReadKey();
 
-                Console.Read();
+                service.Stop();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                foreach (var t in consumers)
-                {
-                    t?.Stop();
-                }
-                producer?.Stop();
-            }
-        }
-
-        public static void VerifyPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                throw new ArgumentException("Путь не задан.");
-            }
-
-            if (path.IndexOfAny(System.IO.Path.GetInvalidPathChars()) != -1)
-            {
-                throw new ArgumentException("Путь содержит недопустимые символы.");
-            }
-
-            if (!Directory.Exists(path))
-            {
-                throw  new ArgumentException("Заданный путь не существует.");
+                _logger.Error(e, "Произошла ошибка во время работы приложения.");
             }
         }
     }
